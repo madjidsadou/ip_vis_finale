@@ -1,0 +1,132 @@
+.state{
+    fill: #e6e4e4;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh; /* Full height */
+    width: 100vw; /* Full width */
+  }
+  
+  #map {
+    background-color: #eee; /* Just for visualization */
+  }
+  
+  .section1 {
+    width: 400px;
+    height: 15vh; /* Full height */
+    background-color: rgba(255, 255, 255, 0.6); /* NOT 'fill' */
+    padding: 10px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  }
+
+  section > p {
+    width: 60%;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    color: #333;
+  } 
+
+
+
+  .section2 {
+    width: 400px;
+    height: 80vh; /* Full height */
+    background-color: rgba(255, 255, 255, 0.6); /* NOT 'fill' */
+    padding: 10px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    flex-direction: row;
+  }
+
+  #container1 {
+    display: flex;
+    gap: 20px; /* spacing between the boxes */
+    align-items: flex-start; /* align tops of boxes */
+  }
+  
+  #originStateSelector{
+    width: 30%;
+    height: 100px;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 16px;
+    color: #333;
+  }
+
+  #destinationStateSelector{
+    width: 30%;
+    height: 100px;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  #selectedStatesBox {
+    display: flex;
+    flex-direction: row;
+    width: 30%;
+    height: 100px;
+    background-color: rgb(244, 244, 244);
+    color: rgb(0, 0, 0); 
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    overflow-y: auto; /* scroll if content gets too long */
+  }
+  
+  #selectedStatesBox2 {
+    display: flex;
+    flex-direction: row;
+    width: 30%;
+    height: 100px;
+    background-color: rgb(244, 244, 244);
+    color: rgb(0, 0, 0); /* optional: makes text readable on dark background */
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    overflow-y: auto; /* scroll if content gets too long */
+  }
+  #container2 {
+    display: flex;
+    gap: 20px; /* spacing between the boxes */
+    align-items: flex-start; /* align tops of boxes */
+  }
+
+  .tooltip {
+    padding: 10px; /* Normal padding */
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+    border-radius: 5px;
+}
+
+.tooltip:hover {
+    padding: 200px; /* Increased padding on hover */
+}
+
+#gpt {
+  position: absolute;
+  top: 740px;
+  left: 340px;
+  width: 500px;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  z-index: 1000; /* Make sure it stays on top */
+}
+
+#submitGPT{
+  position: absolute;
+  z-index: 1000;
+  height: 30px;
+  width: 60px;
+  top: 740px;
+  left: 870px;
+}

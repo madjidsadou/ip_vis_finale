@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartographie</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div id="tooltip" style="
+    position: absolute;
+    visibility: hidden;
+    background: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    box-shadow: 0px 2px 10px rgba(0,0,0,0.2);
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 10;">
+</div>
+
+    <div class="container">
+        <form>
+        <input id="gpt" type="text">
+        <button type="submit" id="submitGPT">Send</button>
+        </form>
+        <div id="map"></div>
+        <div class = "sidebar">
+        <section class="section1">
+            <h1>Date selector</h1>
+            <p>Choose a date from the range of dates available in the calendar below</p>
+            <input type="date" id="datePicker" min="2019-01-01" max="2021-04-15">
+            <p id="selectedDate"></p>
+          
+        </section>
+        <section class="section2">
+            <h1>State selector</h1>
+            <h2>Origin states</h2>
+            <p>Choose an origin state from the list of states available in the dropdown below</p><br>
+            <div id="container1">
+            <select id="originStateSelector" multiple size="10">
+                <option value = "">Select a state</option> 
+                <option value="1">Alabama</option>
+                <option value="4">Arizona</option>
+                <option value="5">Arkansas</option>
+                <option value="6">California</option>
+                <option value="8">Colorado</option>
+                <option value="9">Connecticut</option>
+                <option value="10">Delaware</option>
+                <option value="11">District of Columbia</option>
+                <option value="12">Florida</option>
+                <option value="13">Georgia</option>
+                <option value="15">Hawaii</option>
+                <option value="16">Idaho</option>
+                <option value="17">Illinois</option>
+                <option value="18">Indiana</option>
+                <option value="19">Iowa</option>
+                <option value="20">Kansas</option>
+                <option value="21">Kentucky</option>
+                <option value="22">Louisiana</option>
+                <option value="23">Maine</option>
+                <option value="24">Maryland</option>
+                <option value="25">Massachusetts</option>
+                <option value="26">Michigan</option>
+                <option value="27">Minnesota</option>
+                <option value="28">Mississippi</option>
+                <option value="29">Missouri</option>
+                <option value="30">Montana</option>
+                <option value="31">Nebraska</option>
+                <option value="32">Nevada</option>
+                <option value="33">New Hampshire</option>
+                <option value="34">New Jersey</option>
+                <option value="35">New Mexico</option>
+                <option value="36">New York</option>
+                <option value="37">North Carolina</option>
+                <option value="38">North Dakota</option>
+                <option value="39">Ohio</option>
+                <option value="40">Oklahoma</option>
+                <option value="41">Oregon</option>
+                <option value="42">Pennsylvania</option>
+                <option value="44">Rhode Island</option>
+                <option value="45">South Carolina</option>
+                <option value="46">South Dakota</option>
+                <option value="47">Tennessee</option>
+                <option value="48">Texas</option>
+                <option value="49">Utah</option>
+                <option value="50">Vermont</option>
+                <option value="51">Virginia</option>
+                <option value="53">Washington</option>
+                <option value="54">West Virginia</option>
+                <option value="55">Wisconsin</option>
+                <option value="56">Wyoming</option>
+                <option value="72">Puerto Rico</option>
+            </select>
+            <div id="selectedStatesBox">
+                <ul id="stateList"></ul>
+              </div>              
+        </div>
+            <h2>Destination states</h2>
+            <p>Choose a destination state from the list of states available in the dropdown below</p><br>
+            <div id="container2">
+            <select id="destinationStateSelector" multiple size="10">
+                <option value = "">Select a state</option>
+                <option value="1">Alabama</option>
+                <option value="4">Arizona</option>
+                <option value="5">Arkansas</option>
+                <option value="6">California</option>
+                <option value="8">Colorado</option>
+                <option value="9">Connecticut</option>
+                <option value="10">Delaware</option>
+                <option value="11">District of Columbia</option>
+                <option value="12">Florida</option>
+                <option value="13">Georgia</option>
+                <option value="15">Hawaii</option>
+                <option value="16">Idaho</option>
+                <option value="17">Illinois</option>
+                <option value="18">Indiana</option>
+                <option value="19">Iowa</option>
+                <option value="20">Kansas</option>
+                <option value="21">Kentucky</option>
+                <option value="22">Louisiana</option>
+                <option value="23">Maine</option>
+                <option value="24">Maryland</option>
+                <option value="25">Massachusetts</option>
+                <option value="26">Michigan</option>
+                <option value="27">Minnesota</option>
+                <option value="28">Mississippi</option>
+                <option value="29">Missouri</option>
+                <option value="30">Montana</option>
+                <option value="31">Nebraska</option>
+                <option value="32">Nevada</option>
+                <option value="33">New Hampshire</option>
+                <option value="34">New Jersey</option>
+                <option value="35">New Mexico</option>
+                <option value="36">New York</option>
+                <option value="37">North Carolina</option>
+                <option value="38">North Dakota</option>
+                <option value="39">Ohio</option>
+                <option value="40">Oklahoma</option>
+                <option value="41">Oregon</option>
+                <option value="42">Pennsylvania</option>
+                <option value="44">Rhode Island</option>
+                <option value="45">South Carolina</option>
+                <option value="46">South Dakota</option>
+                <option value="47">Tennessee</option>
+                <option value="48">Texas</option>
+                <option value="49">Utah</option>
+                <option value="50">Vermont</option>
+                <option value="51">Virginia</option>
+                <option value="53">Washington</option>
+                <option value="54">West Virginia</option>
+                <option value="55">Wisconsin</option>
+                <option value="56">Wyoming</option>
+                <option value="72">Puerto Rico</option>
+            </select>
+            <div id="selectedStatesBox2">
+                <ul id="stateList2"></ul>
+              </div>
+            </div>
+             <br><br>
+                <button id="reset">Reset</button>
+                <button id="load">Load simulation</button>
+                <button id="Export">Export csv</button>
+        </section>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.7.0/d3.min.js" integrity="sha512-cd6CHE+XWDQ33ElJqsi0MdNte3S+bQY819f7p3NUHgwQQLXSKjE4cPZTeGNI+vaxZynk1wVU3hoHmow3m089wA==" crossorigin="anonymous"></script>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/json2csv@latest/dist/json2csv.umd.js"></script>
+    <script src="code.js" ></script>
+</body>
+</html>
