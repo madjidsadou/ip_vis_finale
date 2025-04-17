@@ -135,6 +135,7 @@ originSelect.addEventListener("change", () => {
                 d3.csv("mergeddata.csv")
             ])
             .then(function([us, flow]) {
+                flow = flow.map(d=>d.date_range!=""?{...d,date:d.date_range}:d)
                 filteredData = flow.filter(d => {
         
                     return (
@@ -150,6 +151,7 @@ originSelect.addEventListener("change", () => {
                 // }
 
                 if(filteredData.length !== 0){
+
                 console.log("Data to export", filteredData);
                 datanames = filteredData.map(row => ({
                     ...row,
@@ -277,7 +279,7 @@ originSelect.addEventListener("change", () => {
         http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
         var jsonResponse;
-        http.onreadystatechange = function() {
+        http.onreadystatechange =  function() {
             if (http.readyState == 4 && http.status == 200) {
                 let response = http.responseText;
                 var rawresponse = response.replace(/```json|```/g, '').trim();
@@ -288,7 +290,16 @@ originSelect.addEventListener("change", () => {
                     selected = jsondate; // Set this first
                     origin_state_selected = jsonResponse.origin.trim().split(",").map(id => id[0]=='0' ? id[1] : id);
                     destination_state_selected = jsonResponse.destination.trim().split(",").map(id => id[0]=='0' ? id[1] : id);
-                    loadDataForDate(); // Call this after setting selected
+                    selectedStateNames = Array.from(origin_state_selected)
+                    .map(option => stateDict[option].state);
+                    selectedStateNamesdest = Array.from(destination_state_selected)
+                    .map(option => stateDict[option].state);
+                    loadDataForDate(); 
+                    document.getElementById("gpt").value = "waiting AI to plot ...";
+                    setTimeout(() => {
+                    document.getElementById("gpt").value = "";
+                    }
+                    , 2000);
                 } catch (error) {
                     console.error("Parsing error:", error);
                 }}                
@@ -301,8 +312,7 @@ originSelect.addEventListener("change", () => {
         loadDataForDate();
     });
 
-resetbutton = document.getElementById("reset");
-resetbutton.addEventListener("click", () => {
+const reset = () => {
     origin_state_selected = null;
     destination_state_selected = null;
     originStateSelector.value = "";
@@ -316,7 +326,10 @@ resetbutton.addEventListener("click", () => {
     d3.selectAll(".flow-line").remove();
     d3.selectAll(".flow").remove();
     d3.selectAll("circle").remove();
-});
+}
+
+resetbutton = document.getElementById("reset");
+resetbutton.addEventListener("click", reset);
 
 const csvdata = null;
 const exportButton = document.getElementById("Export");
@@ -329,7 +342,7 @@ exportButton.addEventListener("click", () => {
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.setAttribute("href", url);
-        link.setAttribute("download", selected+selectedStateNames +"_flow_data.csv");
+        link.setAttribute("download", selected+selectedStateNames,"to",destination_state_selected +"_flow_data.csv");
         link.style.display = "none";
         document.body.appendChild(link);
         link.click();
