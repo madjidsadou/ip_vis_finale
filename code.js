@@ -267,13 +267,15 @@ originSelect.addEventListener("change", () => {
             .attr("y2", d => projection([+d.lng_d, +d.lat_d])[1]);
             })
 }        
-    loadDataForDate(); 
+    loadDataForDate();
+
+
     var submitbutton = document.getElementById("submitGPT");
     submitbutton.addEventListener("click", function(event) { 
         event.preventDefault(); // Prevent form submission
         var params = document.getElementById("gpt").value;  
         var http = new XMLHttpRequest();
-        var sysPrompt = "You are a smart assistant inside a flow visualization app. Your job is to understand natural language and return a JSON object with the structure: { date, origin, destination }. date is in YYYY-MM-DD format. origin and destination must be U.S. if there is multiple origins or destinations just store them in one variable with commas as goeids of the respective states. state GEOIDs. Only return JSON. No explanations, no other text"
+        var sysPrompt = "You are a smart assistant inside a flow visualization app. Your job is to understand natural language and return a JSON object with the structure: { date, origin, destination, extract }. date is in YYYY-MM-DD format. origin and destination must be U.S. if there is multiple origins or destinations just store them in one variable with commas as goeids of the respective states. state GEOIDs. Only return JSON, if the prompt contains the word extract or a synonym meaning the user wants to extract the data plotted, in the json return yes in the extract section otherwise keep it as no by default, no other thing. No explanations, no other text"
         var baseUrl = "https://text.pollinations.ai/"
         http.open('GET', baseUrl+encodeURIComponent(sysPrompt+params), true);
         http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -290,7 +292,9 @@ originSelect.addEventListener("change", () => {
                     selected = jsondate; // Set this first
                     origin_state_selected = jsonResponse.origin.trim().split(",").map(id => id[0]=='0' ? id[1] : id);
                     destination_state_selected = jsonResponse.destination.trim().split(",").map(id => id[0]=='0' ? id[1] : id);
+                    extract = jsonResponse.extract.trim().toLowerCase();
                     selectedStateNames = Array.from(origin_state_selected)
+
                     .map(option => stateDict[option].state);
                     selectedStateNamesdest = Array.from(destination_state_selected)
                     .map(option => stateDict[option].state);
@@ -298,6 +302,12 @@ originSelect.addEventListener("change", () => {
                     document.getElementById("gpt").value = "waiting AI to plot ...";
                     setTimeout(() => {
                     document.getElementById("gpt").value = "";
+                    if (extract == "yes") {
+                        exportDataToCSV();
+                    }
+                    else {
+                        return;
+                    }
                     }
                     , 2000);
                 } catch (error) {
@@ -312,7 +322,7 @@ originSelect.addEventListener("change", () => {
         loadDataForDate();
     });
 
-const reset = () => {
+function reset  (){
     origin_state_selected = null;
     destination_state_selected = null;
     originStateSelector.value = "";
@@ -332,23 +342,29 @@ resetbutton = document.getElementById("reset");
 resetbutton.addEventListener("click", reset);
 
 const csvdata = null;
-const exportButton = document.getElementById("Export");
-
-exportButton.addEventListener("click", () => {
+var exportButton = document.getElementById("Export");
+function exportDataToCSV() {
     try {
         const csvData = json2csv.parse(datanames);
         console.log("Exported data:", csvData);
+
         const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.setAttribute("href", url);
-        link.setAttribute("download", selected+selectedStateNames,"to",destination_state_selected +"_flow_data.csv");
+
+        const filename = `${selected}${selectedStateNames}_to_${destination_state_selected}_flow_data.csv`;
+        link.setAttribute("download", filename);
+
         link.style.display = "none";
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-    } catch (err) {
+
+    } catch (err) { 
         console.error("CSV export failed:", err);
     }
-});
-})(); // Close the IIFE properly
+    exportButton.addEventListener("click", exportDataToCSV);
+}
+
+})();
