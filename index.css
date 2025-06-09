@@ -1,6 +1,38 @@
 .state{
     fill: #e6e4e4;
 }
+.info-container {
+  position: absolute;
+  top: 20px;
+  left: 1050px;
+  z-index: 1000;
+}
+
+.source{
+  position: absolute;
+  background-color: #ffffff;
+  height: 85 px;
+  width: 320px;
+  top: 737px;
+  left: -160px;
+}
+
+.info-popup {
+  display: none;
+  position: absolute;
+  top: 40px;
+  background: white;
+  padding: 10px 14px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 10px rgba(0,0,0,0.2);
+  max-width: 280px;
+  font-size: 14px;
+  font-family: sans-serif;
+}
+
+.info-container:hover .info-popup {
+  display: block;
+}
 
 .container {
     display: flex;
@@ -11,6 +43,8 @@
   
   #map {
     background-color: #eee; /* Just for visualization */
+    flex: 1; /* Take up remaining space */
+    height: 100vh; /* Full height */
   }
   
   .section1 {
@@ -113,7 +147,7 @@
 #gpt {
   position: absolute;
   top: 740px;
-  left: 340px;
+  left: 240px;
   width: 500px;
   padding: 6px 10px;
   border: 1px solid #ccc;
@@ -128,5 +162,13 @@
   height: 30px;
   width: 60px;
   top: 740px;
-  left: 870px;
+  left: 770px;
+}
+
+#my_dataviz{
+  position : absolute;
+  top: 850px;
+  left: 340px;
+  width: 100%;
+  height: 500px;
 }

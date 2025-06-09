@@ -26,13 +26,32 @@
         <button type="submit" id="submitGPT">Send</button>
         </form>
         <div id="map"></div>
+            <div class="info-container">
+            <div class="info-button">
+                    <img src="info.png" alt="Info" height="40px" width="40px" />
+                </div>
+            <div class="info-popup">
+                <strong>Information</strong><br>
+                Cette visualisation interactive a été développée à des fins exploratoires. Les flux de population présentés ne permettent pas de distinguer les motifs de déplacement (migration, tourisme, travail, etc.). Le périmètre géographique (États-Unis continentaux, sans l'Alaska) a été choisi pour des raisons pratiques, sans intention politique. Les données, bien qu’issues de sources fiables, peuvent comporter des marges d’erreur. Cette application ne prétend pas fournir une vérité absolue, mais un outil d’analyse basé sur des données agrégées.
+                <br><br>Contribution:
+                Sadou Abdelmadjid.<br>
+                carte:<br> https://github.com/topojson/us-atlas<br>
+                données: https://github.com/GeoDS/COVID19USFlows
+            </div>
+                <div class="source">
+                Contributeur: Sadou Abdelmadjid<br>
+                    Source carte: https://github.com/topojson/us-atlas<br>
+                    données des flux: https://github.com/GeoDS/COVID19USFlows
+            </div>
+
+            </div>
+
         <div class = "sidebar">
         <section class="section1">
             <h1>Date selector</h1>
             <p>Choose a date from the range of dates available in the calendar below</p>
             <input type="date" id="datePicker" min="2019-01-01" max="2021-04-15">
             <p id="selectedDate"></p>
-          
         </section>
         <section class="section2">
             <h1>State selector</h1>

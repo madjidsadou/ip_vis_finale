@@ -134,10 +134,11 @@ originSelect.addEventListener("change", () => {
                 d3.json("us.json"),
                 d3.csv("mergeddata.csv")
             ])
+            
             .then(function([us, flow]) {
-                flow = flow.map(d=>d.date_range!=""?{...d,date:d.date_range}:d)
-                filteredData = flow.filter(d => {
-        
+                console.log('flow:', flow);
+                flow = flow.map(d => d.date_range !== "" ? { ...d, date: d.date_range } : d);
+                            filteredData = flow.filter(d => {
                     return (
                         origin_state_selected.includes(d.geoid_o) &&
                         destination_state_selected.includes(d.geoid_d) &&
@@ -185,7 +186,6 @@ originSelect.addEventListener("change", () => {
             .enter().append("path")
             .attr("class", "state")
             .attr("d", path)
-            .attr("fill", "steelblue")
             .attr("stroke", "#fff");
         
             svg.selectAll(".flow")
@@ -231,19 +231,21 @@ originSelect.addEventListener("change", () => {
                 return target ? target[1] : null;
             })
 
-            .on("mouseover", function(event, d) {
-                d3.select("#tooltip")
-                    .style("visibility", "visible")
-                    .html(`${Math.floor(d.pop_flows)} people in motion from ${stateDict[d.geoid_o].state} to ${stateDict[d.geoid_d].state}`);
-            })
-            .on("mousemove", function(event) {
-                d3.select("#tooltip")
-                    .style("top", (event.pageY + 10) + "px")
-                    .style("left", (event.pageX + 10) + "px");
-            })
-            .on("mouseout", function() {
-                d3.select("#tooltip").style("visibility", "hidden");
-            });
+    .attr("stroke", "transparent")
+    .attr("stroke-width", 130) // Increase this value for more padding
+    .on("mouseover", function(event, d) {
+        d3.select("#tooltip")
+            .style("visibility", "visible")
+            .html(`${Math.floor(d.pop_flows)} people in motion from ${stateDict[d.geoid_o].state} to ${stateDict[d.geoid_d].state}`);
+    })
+    .on("mousemove", function(event) {
+        d3.select("#tooltip")
+            .style("top", (event.pageY + 10) + "px")
+            .style("left", (event.pageX + 10) + "px");
+    })
+    .on("mouseout", function() {
+        d3.select("#tooltip").style("visibility", "hidden");
+    });
                                 //trouver une repartition des couleurs adequate
             var moyenne = d3.mean(filteredData, d => d.pop_flows);
             var max = d3.max(filteredData, d => d.pop_flows);
@@ -253,9 +255,9 @@ originSelect.addEventListener("change", () => {
             var q1 = d3.quantile(filteredData, 0.25, d => d.pop_flows);
             var q3 = d3.quantile(filteredData, 0.75, d => d.pop_flows);
             var iqr = q3 - q1;
-            var myColor = d3.scaleSequential().domain([min,max]).range(["#ffffb2","#fecc5c","#fd8d3c","#f03b20","#bd0026"]);
+            var myColor = d3.scaleSequential().domain([min,max]).range(d3.schemeOrRd[9]);
 
-            lines = svg.selectAll(".flow-line")
+            lines = svg.selectAll(".flow-line") 
             lines
             .attr("x2", d => projection([+d.lng_o, +d.lat_o])[0]) // set to source
             .attr("y2", d => projection([+d.lng_o, +d.lat_o])[1])
@@ -342,9 +344,18 @@ resetbutton = document.getElementById("reset");
 resetbutton.addEventListener("click", reset);
 
 const csvdata = null;
-var exportButton = document.getElementById("Export");
+// Move this outside the function and IIFE
+const exportButton = document.getElementById("Export");
+exportButton.addEventListener("click", exportDataToCSV);
+
 function exportDataToCSV() {
     try {
+        // Validate data exists
+        if (!datanames || datanames.length === 0) {
+            console.error("No data available to export");
+            return;
+        }
+
         const csvData = json2csv.parse(datanames);
         console.log("Exported data:", csvData);
 
@@ -353,18 +364,20 @@ function exportDataToCSV() {
         const link = document.createElement("a");
         link.setAttribute("href", url);
 
-        const filename = `${selected}${selectedStateNames}_to_${destination_state_selected}_flow_data.csv`;
+        // Fix filename formatting
+        const filename = `${selected}_exported_flow_data.csv`;
         link.setAttribute("download", filename);
 
         link.style.display = "none";
         document.body.appendChild(link);
         link.click();
+        
+        // Cleanup
         document.body.removeChild(link);
+        URL.revokeObjectURL(url);
 
     } catch (err) { 
         console.error("CSV export failed:", err);
     }
-    exportButton.addEventListener("click", exportDataToCSV);
 }
-
 })();
