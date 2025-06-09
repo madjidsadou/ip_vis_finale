@@ -33,5 +33,5 @@ Cette application web interactive permet de visualiser les flux de population en
 ### Cloner le dépôt
 
 ```bash
-git clone https://github.com/votre-utilisateur/flux-population-us.git
-cd flux-population-us
+git clone https://github.com/madjidsadou/ip_vis_finale
+cd ip_vis_finale
