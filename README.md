@@ -1,6 +1,6 @@
 # Visualisation des flux de population aux États-Unis
 
-Cette application web interactive dévellopé dans le cadre du cours visualisation de données dispensé par Isaac Pante (SLI, Lettres, UNIL)).
+Cette application web interactive dévellopé dans le cadre du cours visualisation de données dispensé par Isaac Pante (SLI, Lettres, UNIL)
  permet de visualiser les flux de population entre les États américains. Elle propose une carte dynamique, des sélecteurs de dates et d'États, ainsi que des outils pour filtrer, analyser et exporter les données.
 
 ![](./screens/1.PNG) 
@@ -39,8 +39,8 @@ Cette application web interactive dévellopé dans le cadre du cours visualisati
 ### Cloner le dépôt
 
 ```bash
-git clone https://github.com/madjidsadou/ip_vis_finale
-cd ip_vis_finale
+git clone https://github.com/madjidsadou/USA_flow_vis
+cd USA_flow_vis
 ```
 
 ### Ouvrir index.html
@@ -52,5 +52,4 @@ attention: pour choisir plusieurs states en tant qu'origine ou destionation, il 
 
 ## 🚀 Vidéo Quick start
 
-[![Watch the video]](./screens/Cartographie - Google Chrome 2025-06-09 18-35-43.mp4)
-
+https://youtu.be/IFvCK4u8sJo
