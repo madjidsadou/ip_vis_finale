@@ -47,6 +47,7 @@ cd USA_flow_vis
 ### Choisir une date, une ou plus plusieur states d'origines et de destinations.
 attention: pour choisir plusieurs states en tant qu'origine ou destionation, il faut maintenir la touche "Ctrl" sur le clavier tout en cliquant sur les states
 ### Clicker sur le boutton simulate.
+### Hover sur les lignes de flux simulés pour avoir des informations suplémentaires.
 ### exportation de données.
 ### utiliser la barre de recherche avec IA a la place du choix manuel.
 
