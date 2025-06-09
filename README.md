@@ -10,6 +10,8 @@ Cette application web interactive dévellopé dans le cadre du cours visualisati
 - 📅 **Sélecteur de date** pour filtrer les données par jour
 - 🧭 **Sélecteurs d’États** d’origine et de destination
 - 🔄 **Boutons** pour réinitialiser ou simuler les flux
+![](./screens/5.PNG) 
+
 - 📤 **Export CSV** des données affichées
 
   ![](./screens/2.PNG) 
@@ -17,7 +19,7 @@ Cette application web interactive dévellopé dans le cadre du cours visualisati
 - 🗺️ **Carte interactive** des États-Unis continentaux
 - 🧠 **Info-bulle** au survol des éléments
 - ℹ️ **Fenêtre d'information** au survol de l’icône Information en haut a droite
-    ![](./screens/6.PNG) 
+  ![](./screens/6.PNG) 
 
 
 ## 🧪 Technologies utilisées
@@ -50,6 +52,8 @@ attention: pour choisir plusieurs states en tant qu'origine ou destionation, il 
 ### Hover sur les lignes de flux simulés pour avoir des informations suplémentaires.
 ### exportation de données.
 ### utiliser la barre de recherche avec IA a la place du choix manuel.
+    ![](./screens/4.PNG) 
+
 
 ## 🚀 Vidéo Quick start
 
