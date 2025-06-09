@@ -10,6 +10,7 @@ Cette application web interactive dévellopé dans le cadre du cours visualisati
 - 📅 **Sélecteur de date** pour filtrer les données par jour
 - 🧭 **Sélecteurs d’États** d’origine et de destination
 - 🔄 **Boutons** pour réinitialiser ou simuler les flux
+  
 ![](./screens/5.PNG) 
 
 - 📤 **Export CSV** des données affichées
@@ -38,7 +39,7 @@ Cette application web interactive dévellopé dans le cadre du cours visualisati
 
 ## 🚀 Guide d'utilisation
 
-### Cloner le dépôt
+### Cloner le dépôt ou télecharger le répertoire
 
 ```bash
 git clone https://github.com/madjidsadou/USA_flow_vis
@@ -52,7 +53,7 @@ attention: pour choisir plusieurs states en tant qu'origine ou destionation, il 
 ### Hover sur les lignes de flux simulés pour avoir des informations suplémentaires.
 ### exportation de données.
 ### utiliser la barre de recherche avec IA a la place du choix manuel.
-    ![](./screens/4.PNG) 
+![](./screens/4.PNG) 
 
 
 ## 🚀 Vidéo Quick start
