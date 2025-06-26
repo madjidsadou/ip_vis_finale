@@ -1,6 +1,6 @@
 
 var coords ;
-var selected = null;	
+var selected = "2020-06-01"; // Default date	
 var filteredData = null;
 var datanames = null;
 var  lines = null;      
@@ -77,35 +77,49 @@ dateInput.addEventListener("change", () => {
 
 var origin_state_selected = []; // Array to store selected state values
 const originSelect = document.getElementById("originStateSelector");
-var selectedStateNames = []; 
+var selectedStateNames = [];
+
 originSelect.addEventListener("change", () => {
-    // Clear the array and re-push all selected options
+    // Get selected values and names
     origin_state_selected = Array.from(originSelect.selectedOptions)
-        .map(option => option.value);  // Get all selected values
+        .map(option => option.value);
+
     selectedStateNames = Array.from(originSelect.selectedOptions)
         .map(option => option.text);
 
+    // Display the selected names
     displayStates.textContent = selectedStateNames.join(", ");
-    
 });
 
-    var destination_state_selected = []; // Array to store selected state values
-    destinationSelect = document.getElementById("destinationStateSelector");
-    var selectedStateNamesdest = []; 
-    const displayStatesdest = document.getElementById("selectedStatesBox2");
-    destinationSelect.addEventListener("change", () => {
-        // Clear the array and re-push all selected options
-        destination_state_selected = Array.from(destinationSelect.selectedOptions)
-            .map(option => option.value);  // Get all selected values
-    
-        selectedStateNamesdest = Array.from(destinationSelect.selectedOptions)
-            .map(option => option.text);
+// 🔁 Initial render if preselected options exist
+const triggerChangeEvent = new Event("change");
+originSelect.dispatchEvent(triggerChangeEvent);
 
-        displayStatesdest.textContent = selectedStateNamesdest.join(", ");
-            });
-    
+var destination_state_selected = []; // Array to store selected state values
+const destinationSelect = document.getElementById("destinationStateSelector");
+var selectedStateNamesdest = []; 
+const displayStatesdest = document.getElementById("selectedStatesBox2");
+
+// Event listener for changes
+destinationSelect.addEventListener("change", () => {
+    destination_state_selected = Array.from(destinationSelect.selectedOptions)
+        .map(option => option.value);
+
+    selectedStateNamesdest = Array.from(destinationSelect.selectedOptions)
+        .map(option => option.text);
+
+    displayStatesdest.textContent = selectedStateNamesdest.join(", ");
+});
+
+// Trigger the change handler on load to show preselected states
+destinationSelect.dispatchEvent(new Event("change"));    
 
 
+function showError(message) {
+  const popup = document.getElementById("errorPopup");
+  document.getElementById("errorMessage").textContent = message;
+  popup.style.display = "block";
+}
 
 (function() {
     var margin = { top: 0, right: 0, bottom: 0, left: 0 },
@@ -119,23 +133,18 @@ originSelect.addEventListener("change", () => {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         function loadDataForDate() {
-            console.log("selected date", selected);
-        
-            // if (!selected || origin_state_selected.length === 0 || destination_state_selected.length === 0) {
-            //     console.error("Missing required filter values:", {
-            //         selected,
-            //         origin_state_selected,
-            //         destination_state_selected
-            //     });
-            //     return;
-            // }
-        
-            Promise.all([
-                d3.json("us.json"),
-                d3.csv("mergeddata.csv")
-            ])
-            
-            .then(function([us, flow]) {
+  console.log("selected date", selected);
+
+  if (!selected || origin_state_selected.length === 0 || destination_state_selected.length === 0) {
+    showError("Please select a date, origin state(s), and destination state(s).");
+    return;
+  }
+
+  Promise.all([
+    d3.json("us.json"),
+    d3.csv("mergeddata.csv")
+  ])
+  .then(function([us, flow])  {
                 console.log('flow:', flow);
                 flow = flow.map(d => d.date_range !== "" ? { ...d, date: d.date_range } : d);
                             filteredData = flow.filter(d => {
@@ -188,22 +197,40 @@ originSelect.addEventListener("change", () => {
             .attr("d", path)
             .attr("stroke", "#fff");
         
-            svg.selectAll(".flow")
-            .data(flow.filter(function(d) {
-                var coords = projection([+d.lng_d, +d.lat_d]);
-                return coords !== null; 
-            }))
-            .enter().append("circle")
-            .attr("class", "flow")
-            .attr("r", 5)
-            .attr("cx", function(d) {
-                coords = projection([+d.lng_d, +d.lat_d]);
-                return coords[0];
-            })
-            .attr("cy", function(d) {
-                coords = projection([+d.lng_d, +d.lat_d]);
-                return coords[1];
-            });
+            function flash(selection) {
+  selection
+    .transition()
+    .duration(500)
+    .style("opacity", 0)
+    .transition()
+    .duration(500)
+    .style("opacity", 1)
+    .on("end", function() {
+      flash(d3.select(this)); // loop again
+    });
+}
+
+// Origin circles
+svg.selectAll(".origin")
+  .data(flow)
+  .enter().append("circle")
+  .attr("class", "origin")
+  .attr("r", 5)
+  .attr("fill", "green")
+  .attr("cx", d => projection([+d.lng_o, +d.lat_o])[0])
+  .attr("cy", d => projection([+d.lng_o, +d.lat_o])[1])
+  .each(function() {
+    flash(d3.select(this)); // apply flashing animation
+  });
+
+// Destination circles
+svg.selectAll(".destination")
+  .data(flow)
+  .enter().append("circle")
+  .attr("class", "destination")
+  .attr("r", 5)
+  .attr("cx", d => projection([+d.lng_d, +d.lat_d])[0])
+  .attr("cy", d => projection([+d.lng_d, +d.lat_d])[1]);
             svg.selectAll(".flow-line")
             .data(flow.filter(function(d) {
                 var source = projection([+d.lng_o, +d.lat_o]); 
@@ -255,7 +282,9 @@ originSelect.addEventListener("change", () => {
             var q1 = d3.quantile(filteredData, 0.25, d => d.pop_flows);
             var q3 = d3.quantile(filteredData, 0.75, d => d.pop_flows);
             var iqr = q3 - q1;
-            var myColor = d3.scaleSequential().domain([min,max]).range(d3.schemeOrRd[9]);
+            var myColor = d3.scaleSequential()
+            .domain([min, max])
+            .interpolator(d3.interpolateOrRd);
 
             lines = svg.selectAll(".flow-line") 
             lines
@@ -323,8 +352,10 @@ originSelect.addEventListener("change", () => {
     loadingdata.addEventListener("click", function() {
         loadDataForDate();
     });
-
 function reset  (){
+    preselectedValues = [];
+    preselectedValues1 = [];
+
     origin_state_selected = null;
     destination_state_selected = null;
     originStateSelector.value = "";

@@ -16,6 +16,14 @@
   top: 737px;
   left: -160px;
 }
+.infosend{
+  position: absolute;
+  height: 85 px;
+  width: 500px;
+  top: 757px;
+  left: -800px;
+}
+
 
 .info-popup {
   display: none;

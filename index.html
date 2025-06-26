@@ -43,20 +43,42 @@
                     Source carte: https://github.com/topojson/us-atlas<br>
                     données des flux: https://github.com/GeoDS/COVID19USFlows
             </div>
+                            <div class="infosend">
+                                cette fonctionalité permet d'envoyer un message à l'IA, vous pouvez structurer votre requete sous cette forme 'simulate flows from [origin states you want] to [selected states you want] on the [date you want, only select dates from 01-01-2019 to 14-04-2021] et cliquer sur le button 'send'. <br>
+                </div>
+
 
             </div>
+<div id="errorPopup" style="
+  display: none;
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #f44336;
+  color: white;
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  z-index: 1000;
+  font-weight: bold;
+">
+  <span id="errorMessage">Missing input!</span>
+  <br><br>
+  <button onclick="document.getElementById('errorPopup').style.display='none'">OK</button>
+</div>
 
         <div class = "sidebar">
         <section class="section1">
             <h1>Date selector</h1>
-            <p>Choose a date from the range of dates available in the calendar below</p>
-            <input type="date" id="datePicker" min="2019-01-01" max="2021-04-15">
+            <p>Choose a date from the range of dates available in the calendar below,data only available from 01-01-2019 to 14-04-2021</p>
+            <input type="date" id="datePicker" min="2019-01-01" max="2021-04-15" value="2020-06-01">
             <p id="selectedDate"></p>
         </section>
-        <section class="section2">
+        <section class="section2"><br>
             <h1>State selector</h1>
             <h2>Origin states</h2>
-            <p>Choose an origin state from the list of states available in the dropdown below</p><br>
+            <p>Choose an origin state from the list of states available in the dropdown below, press the 'Crtl' button to select multiple states</p><br>
             <div id="container1">
             <select id="originStateSelector" multiple size="10">
                 <option value = "">Select a state</option> 
@@ -112,12 +134,23 @@
                 <option value="56">Wyoming</option>
                 <option value="72">Puerto Rico</option>
             </select>
+            <script>
+  const select = document.getElementById('originStateSelector');
+  var preselectedValues = ['6', '36']; // California and New York
+
+  for (let option of select.options) {
+    if (preselectedValues.includes(option.value)) {
+      option.selected = true;
+    }
+  }
+</script>
+
             <div id="selectedStatesBox">
                 <ul id="stateList"></ul>
               </div>              
         </div>
             <h2>Destination states</h2>
-            <p>Choose a destination state from the list of states available in the dropdown below</p><br>
+            <p>Choose a destination state from the list of states available in the dropdown below, press the 'Crtl' button to select multiple states</p><br>
             <div id="container2">
             <select id="destinationStateSelector" multiple size="10">
                 <option value = "">Select a state</option>
@@ -172,7 +205,19 @@
                 <option value="55">Wisconsin</option>
                 <option value="56">Wyoming</option>
                 <option value="72">Puerto Rico</option>
+                
             </select>
+                        <script>
+const select1 = document.getElementById('destinationStateSelector');
+var preselectedValues1 = ['1', '2', '35']; // Preselect by values
+
+for (let option of select1.options) {
+  if (preselectedValues1.includes(option.value)) {
+    option.selected = true;
+  }
+} 
+</script>
+
             <div id="selectedStatesBox2">
                 <ul id="stateList2"></ul>
               </div>
